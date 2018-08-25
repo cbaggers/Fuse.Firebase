@@ -18,13 +18,13 @@ namespace Firebase.Notifications
     public static class NotificationService
     {
         extern(!iOS && !Android)
-        static NotificationService()
+        public static void Init()
         {
             OnRegistrationFailed(null, "Firebase Notifications are not yet available on this platform");
         }
 
         extern(Android)
-        static NotificationService()
+        public static void Init()
         {
             Firebase.Core.Init();
             AndroidImpl.ReceivedNotification += OnReceived;
@@ -34,7 +34,7 @@ namespace Firebase.Notifications
         }
 
         extern(iOS)
-        static NotificationService()
+        public static void Init()
         {
             Firebase.Core.Init();
             iOSImpl.ReceivedNotification += OnReceived;

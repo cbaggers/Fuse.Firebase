@@ -3,6 +3,7 @@
 #include "AppDelegateFirebaseNotify.h"
 @{Fuse.Platform.Lifecycle:IncludeDirective}
 @{Firebase.Notifications.iOSImpl:IncludeDirective}
+#include <Firebase.h>
 
 @implementation uContext (FirebaseNotify)
 
@@ -13,6 +14,10 @@
 #if (!@(Project.iOS.PushNotifications.RegisterOnLaunch:IsSet)) || @(Project.iOS.PushNotifications.RegisterOnLaunch:Or(0))
 	@{Firebase.Notifications.iOSImpl.RegisterForPushNotifications():Call()};
 #endif
+}
+
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [FIRMessaging messaging].APNSToken = deviceToken;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {

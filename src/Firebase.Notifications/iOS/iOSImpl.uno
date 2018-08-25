@@ -10,6 +10,7 @@ using Fuse.Platform;
 
 namespace Firebase.Notifications
 {
+    [Require("Xcode.Framework", "UserNotifications.framework")]
     [Require("Cocoapods.Podfile.Target", "pod 'Firebase/Messaging'")]
     [extern(iOS) Require("Source.Include", "iOSFirebaseNotificationCallbacks.h")]
     [extern(iOS) Require("Source.Include", "Firebase/Firebase.h")]
@@ -21,7 +22,7 @@ namespace Firebase.Notifications
     [Require("Entity", "Firebase.Notifications.iOSImpl.OnReceivedNotification(string,bool)")]
 
     extern(iOS)
-    public class iOSImpl
+    public static class iOSImpl
     {
 
         public static event EventHandler<KeyValuePair<string,bool>> ReceivedNotification;
@@ -133,17 +134,25 @@ namespace Firebase.Notifications
         [Foreign(Language.ObjC)]
         internal static void RegisterForPushNotifications()
         @{
-            UIApplication* application = [UIApplication sharedApplication];
-            if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-                // use registerUserNotificationSettings
+            if ([UNUserNotificationCenter class] != nil)
+            {
+                FireNotificationCallbacks* del = @{_iosDelegate};
+                [UNUserNotificationCenter currentNotificationCenter].delegate = del;
+                UNAuthorizationOptions authOptions = UNAuthorizationOptionAlert |
+                UNAuthorizationOptionSound | UNAuthorizationOptionBadge;
+                [[UNUserNotificationCenter currentNotificationCenter]
+                 requestAuthorizationWithOptions:authOptions
+                 completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                     int a = 10;
+                 }];
+                UIApplication* application = [UIApplication sharedApplication];
+                [application registerForRemoteNotifications];
+            }
+            else
+            {
+                UIApplication* application = [UIApplication sharedApplication];
                 [application registerUserNotificationSettings: [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound  | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)  categories:nil]];
                 [application registerForRemoteNotifications];
-            } else {
-                // use registerForRemoteNotificationTypes:
-                [application registerForRemoteNotificationTypes:
-                 UIRemoteNotificationTypeBadge |
-                 UIRemoteNotificationTypeSound |
-                 UIRemoteNotificationTypeAlert];
             }
         @}
     }

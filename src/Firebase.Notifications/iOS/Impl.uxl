@@ -1,3 +1,9 @@
 <Extensions Backend="CPlusPlus" Condition="iOS">
 	<Define AppDelegate.PushNotificationMethods="1" />
+	<Require Xcode.Plist.Element>
+	<![CDATA[
+		<key>FirebaseAppDelegateProxyEnabled</key>
+		<false/>
+	]]>
+	</Require>
 </Extensions>
