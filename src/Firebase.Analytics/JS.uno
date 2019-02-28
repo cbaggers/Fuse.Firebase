@@ -15,16 +15,21 @@ namespace Firebase.Analytics.JS
     /**
     */
     [UXGlobalModule]
-    public sealed class AnalyticsModule : NativeModule
+    public sealed class AnalyticsModule : NativeEventEmitterModule
     {
         static readonly AnalyticsModule _instance;
 
-        public AnalyticsModule()
+        static AnalyticsModule()
         {
-            if(_instance != null) return;
+            Firebase.Core.Init();
+        }
+
+        public AnalyticsModule()
+            : base(true)
+        {
+            if (_instance != null) return;
             Uno.UX.Resource.SetGlobalKey(_instance = this, "Firebase/Analytics");
 
-            Firebase.Core.Init();
             AddMember(new NativeFunction("logEvent", LogEvent));
         }
 
