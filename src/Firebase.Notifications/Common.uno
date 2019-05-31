@@ -154,21 +154,29 @@ namespace Firebase.Notifications
         public extern(!iOS && !Android) static void ClearAllNotifications() { }
 
         [Foreign(Language.ObjC)]
-        public extern(iOS) static String GetFCMToken()
+        public extern(iOS) static void GetFCMToken(Action<string> onToken)
         @{
-            NSString *fcmToken = [[FIRInstanceID instanceID] token];
-            return fcmToken;
+            [[FIRInstanceID instanceID]
+             instanceIDWithHandler:^(FIRInstanceIDResult * _Nullable result,
+                                     NSError * _Nullable error)
+             {
+                 if (error != nil) {
+                     onToken(NULL);
+                 } else {
+                     onToken(result.token);
+                 }
+             }];
         @}
 
         [Foreign(Language.Java)]
-        public extern(Android) static String GetFCMToken()
+        public extern(Android) static void GetFCMToken(Action<string> onToken)
         @{
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
             Log.d("TOKEN", "Refreshed token: " + refreshedToken);
-            return refreshedToken;
+            onToken(refreshedToken);
         @}
 
-        public extern(!iOS && !Android) static String GetFCMToken() { return ""; }
+        public extern(!iOS && !Android) static void GetFCMToken(Action<string> onToken) {}
 
         [Foreign(Language.ObjC)]
         public extern(iOS) static void SubscribeToTopic(string topicName)

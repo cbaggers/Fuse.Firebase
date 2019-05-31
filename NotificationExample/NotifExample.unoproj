@@ -7,7 +7,7 @@
   "Projects": [
     "../src/Firebase/Firebase.unoproj",
     "../src/Firebase.Database/Firebase.Database.unoproj",
-    "../src/Firebase.Notifications.Android/Firebase.Notifications.Android.unoproj"
+    "../src/Firebase.Notifications/Firebase.Notifications.unoproj"
   ],
   "Android": {
     "NotificationIcon": {
