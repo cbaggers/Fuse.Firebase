@@ -130,12 +130,21 @@ namespace Firebase.Notifications
             return null;
         }
 
-        public object GetFCMToken(Context context, object[] args)
+        void OnToken(string token)
         {
-            var token = Firebase.Notifications.NotificationService.GetFCMToken();
-            if (token != null) {
+            if (token == null)
+            {
+                Emit("onRegistrationFailed", "Failed to fetch fcm token");
+            }
+            else
+            {
                 Emit("registrationSucceeded", token);
             }
+        }
+
+        public object GetFCMToken(Context context, object[] args)
+        {
+            Firebase.Notifications.NotificationService.GetFCMToken(OnToken);
             return null;
         }
     }

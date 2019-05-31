@@ -148,6 +148,7 @@ namespace Firebase.Notifications
 
         public extern(!iOS && !Android) static void ClearAllNotifications() { }
 
+
         [Foreign(Language.ObjC)]
         public extern(iOS) static String GetFCMToken()
         @{
@@ -164,7 +165,5 @@ namespace Firebase.Notifications
         @}
 
         public extern(!iOS && !Android) static String GetFCMToken() { return ""; }
-
-
     }
 }
