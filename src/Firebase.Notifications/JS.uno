@@ -144,8 +144,7 @@ namespace Firebase.Notifications
         {
             if (token == null)
             {
-                debug_log "Argh the token thign fucked up";
-                //Emit("registrationSucceeded", token);
+                Emit("onRegistrationFailed", "Failed to fetch fcm token");
             }
             else
             {
