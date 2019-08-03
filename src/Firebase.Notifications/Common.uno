@@ -173,7 +173,7 @@ namespace Firebase.Notifications
         @{
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
             Log.d("TOKEN", "Refreshed token: " + refreshedToken);
-            onToken(refreshedToken);
+            onToken.run(refreshedToken);
         @}
 
         public extern(!iOS && !Android) static void GetFCMToken(Action<string> onToken) {}
